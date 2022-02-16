@@ -1,0 +1,1 @@
+ls snapshots/ | wc -l
