@@ -14,8 +14,11 @@ def index():
 
 @app.route('/snapshot/make', methods=['POST'])
 def make_snap_route():
-    make_snapshot(request.get_json()['addresses_list'])
-    check_overlimit()
+    try:
+        make_snapshot(request.get_json()['addresses_list'])
+        return {'status': 'done'}
 
-    return {'status': 'done'}
+    except Exception as error:
+        print(repr(error))
+        return {'status': 'error'}
 
