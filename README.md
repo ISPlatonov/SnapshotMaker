@@ -22,39 +22,39 @@
 
 ## API
 
-openapi: 3.0.0
-info:
-    title: "SnapshotMaker"
-    version: "0.1"
+    openapi: 3.0.0
+    info:
+        title: "SnapshotMaker"
+        version: "0.1"
 
-paths:
-    /snapshot/make:
-        post:
-            description: 'Request to make a snapshot then send to somewhere'
-            requestBody:
-              content:
-                  application/json:
-                      schema:
-                          type: object
-                          properties:
-                              addresses_list:
-                                  type: array
-                                  items:
-                                      type: string
-                                      required:
-                                          - address
-                          required:
-                              - addresses_list
-            responses:
-                '200':
-                    description: 'Return status of snapshot'
-                    content:
-                        application/json:
-                            schema:
-                                type: object
-                                properties:
-                                    status:
+    paths:
+        /snapshot/make:
+            post:
+                description: 'Request to make a snapshot then send to somewhere'
+                requestBody:
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                addresses_list:
+                                    type: array
+                                    items:
                                         type: string
-                                        
-                                required:
-                                    - status
+                                        required:
+                                            - address
+                            required:
+                                - addresses_list
+                responses:
+                    '200':
+                        description: 'Return status of snapshot'
+                        content:
+                            application/json:
+                                schema:
+                                    type: object
+                                    properties:
+                                        status:
+                                            type: string
+                                            
+                                    required:
+                                        - status
