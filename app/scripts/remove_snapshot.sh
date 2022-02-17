@@ -1,1 +1,1 @@
-rm app/snapshots/$1
+rm snapshots/$1

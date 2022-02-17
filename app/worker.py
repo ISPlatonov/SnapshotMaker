@@ -27,7 +27,7 @@ def check_overlimit():
     snaps_number = int(process.stdout.read())
 
     if snaps_number > max_snaps_number:
-        remove_overlimit(max_snaps_number - snaps_number)
+        remove_overlimit(snaps_number - max_snaps_number)
 
 
 def remove_overlimit(overlimit_number):
@@ -36,7 +36,9 @@ def remove_overlimit(overlimit_number):
     process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
     files_list = process.stdout.read()
 
-    files_list = files_list.split('\n')
+    files_list = files_list.decode('utf-8').split()
+
+    #print(overlimit_number)
 
     files_list.sort()
     files_to_erase = files_list[:overlimit_number]
