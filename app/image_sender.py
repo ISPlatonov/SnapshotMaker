@@ -9,7 +9,7 @@ def send_image(channel, topic, image_path, config_path=".zuliprc", message_type=
     # Upload a file
     with open(image_path, "rb") as fp:
         image = client.upload_file(fp)
-    print(zip(image))
+    #print(zip(image))
     # Share the file by including it in a message.
     client.send_message(
         {

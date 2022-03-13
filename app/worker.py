@@ -35,7 +35,7 @@ def send_snapshot(filename, address_list):
         try:
             #process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
             #output = process.stdout.read()
-            print('snapshots/' + filename.decode('utf-8').strip())
+            #print('snapshots/' + filename.decode('utf-8').strip())
             send_image(address['channel'], address['topic'], 'snapshots/' + filename.decode('utf-8').strip(), 'app/configs/.zuliprc')
             check_overlimit()
         except Exception:

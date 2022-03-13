@@ -16,9 +16,9 @@ def index():
 def make_snap_route():
     try:
         make_snapshot(request.get_json()['addresses_list'])
-        return {'status': 'done'}
+        return 'Done', 200
 
     except Exception as error:
         print(repr(error))
-        return {'status': 'error'}
+        return jsonify(error=str(error)), 500
 
