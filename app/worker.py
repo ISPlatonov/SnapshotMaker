@@ -1,4 +1,4 @@
-import subprocess, time
+import subprocess, time, json
 #from app import app
 #import sys
 #sys.path.append("./app")
@@ -7,8 +7,13 @@ from app.image_sender import send_image
 
 
 # it should be loaded up from json file! 
-camera_address = 'rtsp://admin:Supervisor@172.18.191.177/live/0/MAIN/'
-max_snaps_number = 20
+#camera_address = 'rtsp://admin:Supervisor@172.18.191.177/live/0/MAIN/'
+#max_snaps_number = 20
+with open('app/configs/config.json') as config_file:
+    config = json.load(config_file)
+
+camera_address = config['camera_address']
+max_snaps_number = config['max_snaps_number']
 
 
 def make_snapshot(addresses_list):
