@@ -2,6 +2,25 @@ import zulip
 import argparse
 
 
+def send(channel, topic, image_path, config_path=".zuliprc", message_type="stream"): 
+    # Pass the path to your zuliprc file here.
+    client = zulip.Client(config_file=config_path)
+
+    # Upload a file
+    with open(args.image, "rb") as fp:
+        image = client.upload_file(fp)
+
+    # Share the file by including it in a message.
+    client.send_message(
+        {
+            "type": message_type,
+            "to": args.channel,
+            "topic": args.topic,
+            "content": "[new snapshot]({})".format(image["uri"]),
+        }
+    )
+
+
 parser = argparse.ArgumentParser(description="Python script to send snapshots to specified Zulip channel (topic)")
 
 parser.add_argument("--config", help="path to `.zuliprc` file")
@@ -14,27 +33,18 @@ parser.add_argument("--image", "-i", help="path to image to be sent")
 args = parser.parse_args()
 config_path = ".zuliprc"
 message_type = "stream"
+channel = args.channel
+topic = args.topic
+image_path = args.image
 
 if args.config:
     config_path = args.config-path
 if args.type:
     message_type = args.type
-if not (args.channel and args.topic and args.image):
-    raise Exception("channel or topic or image path not specified")
+#if (args.channel and args.topic and args.image):
+#    send(config_path, message_type, channel, topic, image_path)
 
-# Pass the path to your zuliprc file here.
-client = zulip.Client(config_file=config_path)
 
-# Upload a file
-with open(args.image, "rb") as fp:
-    image = client.upload_file(fp)
+if "__name__" == "__main__":
+    send(channel, topic, image_path, config_path, message_type)
 
-# Share the file by including it in a message.
-client.send_message(
-    {
-        "type": message_type,
-        "to": args.channel,
-        "topic": args.topic,
-        "content": "[new snapshot]({})".format(image["uri"]),
-    }
-)

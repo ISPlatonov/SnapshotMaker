@@ -29,8 +29,8 @@ def make_snapshot(addresses_list):
     
 
 def send_snapshot(filename, address_list):
-    # ... will write it later...
-    pass
+    for address in addresses_list:
+        send(address.channel, address.topic, filename)
 
 
 def check_overlimit():
