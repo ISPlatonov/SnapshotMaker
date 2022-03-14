@@ -1,1 +1,0 @@
-rm snapshots/$1
