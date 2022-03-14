@@ -16,6 +16,9 @@ camera_address = config['camera_address']
 max_snaps_number = config['max_snaps_number']
 
 
+def get_camera_address():
+    return camera_address
+
 def make_snapshot(addresses_list):
     if not isinstance(addresses_list, list):
         raise TypeError("wrong datatype in request")

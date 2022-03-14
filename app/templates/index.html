@@ -1,0 +1,55 @@
+<!doctype html>
+<title>Snapshotmaker</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='toastr.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<section class="container">
+    <div class="button">
+        <div id="button" class="select-button"></div>
+    </div>
+    <video class="stream" src="http://172.18.191.208:8080/stream" autoplay width="800" height="1280">
+        Your browser does not support the VIDEO tag and/or RTP streams.
+    </video>
+</section>
+<script src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}""></script>
+<script src="{{ url_for('static', filename='toastr.js') }}""></script>
+<script>
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": true,
+        "progressBar": true,
+        "positionClass": "toast-bottom-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "10000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+
+    async function postData(url = '', data = {}) {
+        const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data) // body data type must match "Content-Type" header
+        });
+        return await response.json(); // parses JSON response into native JavaScript objects
+    }
+  
+    button = document.getElementById("button");
+    button.onclick = () => {
+        req_json = {"addresses_list": [{"channel": "СВТ-2 Портативная встраиваемая система \"Board Snapshot\"", "topic": "Snapshot"}]};
+        toastr["success"](`Фото доски отправлено в канал: ${req_json.addresses_list[0].channel}, тему: ${req_json.addresses_list[0].topic}.`);
+        postData('/snapshot/make', req_json).then((data) => {
+            if (data['error']) {
+                toastr["error"](`Возникла ошибка: ${data['error']}`)
+            }
+        });
+    }
+</script>
