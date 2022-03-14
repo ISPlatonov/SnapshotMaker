@@ -1,4 +1,4 @@
-import subprocess, time, json
+import subprocess, time, json, os
 #from app import app
 #import sys
 #sys.path.append("./app")
@@ -20,10 +20,19 @@ def make_snapshot(addresses_list):
     if not isinstance(addresses_list, list):
         raise TypeError("wrong datatype in request")
 
-    command = ['bash', 'app/scripts/make_snapshot.sh', camera_address]
+    '''
+    file_name=snapshot_$(date +%s.%N).jpg
+
+    ffmpeg -rtsp_transport tcp -i $1 -y -vframes 1 -loglevel error snapshots/$file_name
+    echo $file_name
+    '''
+
+    #command = ['bash', 'app/scripts/make_snapshot.sh', camera_address]
     try:
+        filename = 'snapshot_{}.jpg'.format(time.time())
+        command = ['ffmpeg', '-rtsp_transport', 'tcp', '-i', camera_address, '-y', '-vframes', '1', '-loglevel', 'error', 'snapshots/{}'.format(filename)]
         process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
-        filename = process.stdout.read()
+        #filename = process.stdout.read()
         process.wait()
     except Exception:
         raise
@@ -41,17 +50,17 @@ def send_snapshot(filename, address_list):
             #process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
             #output = process.stdout.read()
             #print('snapshots/' + filename.decode('utf-8').strip())
-            send_image(address['channel'], address['topic'], 'snapshots/' + filename.decode('utf-8').strip(), 'app/configs/.zuliprc')
+            send_image(address['channel'], address['topic'], 'snapshots/' + filename, 'app/configs/.zuliprc')
             check_overlimit()
         except Exception:
             raise 
       
 
 def check_overlimit():
-    command = ['bash', 'app/scripts/count_snapshots.sh']
+    #command = ['bash', 'app/scripts/count_snapshots.sh']
     try:
-        process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
-        snaps_number = int(process.stdout.read())
+        #process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
+        snaps_number = len(os.listdir()) #int(process.stdout.read())
     except Exception:
         raise
 
@@ -64,12 +73,12 @@ def check_overlimit():
 
 def remove_overlimit(overlimit_number):
     # ... will write it later...
-    command = ['bash', 'app/scripts/list_snapshots.sh']
+    #command = ['bash', 'app/scripts/list_snapshots.sh']
     try:
-        process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
-        files_list = process.stdout.read()
+        #process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
+        #files_list = process.stdout.read()
 
-        files_list = files_list.decode('utf-8').split()
+        files_list = os.listdir('snapshots/') #files_list.decode('utf-8').split()
     except Exception:
         raise
 
@@ -79,11 +88,12 @@ def remove_overlimit(overlimit_number):
     files_to_erase = files_list[:overlimit_number]
 
     for filename in files_to_erase:
-        command = ['bash', 'app/scripts/remove_snapshot.sh', filename]
-        process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
-        output = process.stdout.read()
+        #command = ['bash', 'app/scripts/remove_snapshot.sh', filename]
+        #process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
+        #output = process.stdout.read()
         
-        if output != '': # ???
+        #if output != '': # ???
             # error
-            pass
+            #pass
+        os.remove('snapshots/{}'.format(filename))
 
