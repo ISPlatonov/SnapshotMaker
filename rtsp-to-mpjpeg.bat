@@ -1,2 +1,0 @@
-taskkill /f /im "vlc.exe"
-start vlc -vvv -Idummy rtsp://admin:Supervisor@172.18.191.177/live/0/MAIN/ --sout #transcode{vcodec=MJPG,venc=ffmpeg{strict=1},fps=10,width=1280,height=800}:standard{access=http{mime=multipart/x-mixed-replace;boundary=--7b3cc56e5f51db803f790dad720ed50a},mux=mpjpeg,dst=:9911/}
