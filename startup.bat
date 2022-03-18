@@ -1,2 +1,2 @@
-start /b flask run --host=127.0.0.1
-"C:\Program Files\Google\Chrome\Application\chrome.exe" 127.0.0.1:5000 --window-size=1280,800 --new-window --start-fullscreen --hide-scrollbars
+start flask run --host=127.0.0.1
+start "" "C:\Program Files\Mozilla Firefox\firefox.exe" --kiosk --private-window 127.0.0.1:5000
