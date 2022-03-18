@@ -3,10 +3,7 @@
 }
 .container {
     display: flex;
-    align-items: center; 
     justify-content: center;
-    width: 98%;
-    height: 100%; 
     position: relative;
 }
 .button {
@@ -16,8 +13,8 @@
     left: 1%;
 }
 .stream {
-    width: 100%;
-    height: 100%;
+    width: 1200px;
+    height: 780px;
     z-index: 0;
 }
 .select-button {
