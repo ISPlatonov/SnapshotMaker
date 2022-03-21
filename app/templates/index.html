@@ -3,11 +3,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='toastr.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <div class="btn-group">
-    <button>SAMPLE</button>
-    <button>SAMPLE</button>
-    <button>SAMPLE</button>
-    <button>SAMPLE</button>
-    <button>SAMPLE</button>
+    <button class="btn">SAMPLE</button>
+    <button class="btn">SAMPLE</button>
+    <button class="btn">SAMPLE</button>
+    <button class="btn">SAMPLE</button>
+    <button class="btn">SAMPLE</button>
 </div>
 <div class="container">
     <img class="preview" src="{{ mjpg_address }}"></img>
@@ -15,7 +15,13 @@
 <script src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}""></script>
 <script src="{{ url_for('static', filename='toastr.js') }}""></script>
 <script>
-    /*
+    channelList = [
+    "СВТ-2 Портативная встраиваемая система \"Board Snapshot\"",
+    "#УЛ Видеотехнологий",
+    "#297 Видеозалы",
+    "#19102 Телецентр (АСБ)",
+    "#19104 Видеосервисы",
+    "#19107 Студия самозаписи"];
     toastr.options = {
         "closeButton": true,
         "debug": false,
@@ -52,16 +58,28 @@
         return await response.json();
     }
     
-    console.log(getData('/channel_list/get').then());
-
-    button.onclick = () => {
-        req_json = {"addresses_list": [{"channel": "asdad", "topic": "Snapshot"}]};
-        toastr["success"](`Фото доски отправлено в канал: ${req_json.addresses_list[0].channel}, тему: ${req_json.addresses_list[0].topic}.`);
-        postData('/snapshot/make', req_json).then((data) => {
-            if (data['error']) {
-                toastr["error"](`Возникла ошибка: ${data['error']}`)
+    getData('/channel_list/get').then((data) => {
+        if (data['error']) {
+            toastr["error"](`Возникла ошибка при загрузке списка каналов. Загружены стандартные каналы.`);
+        } else {
+            buttons = document.getElementsByClassName("btn");
+            for (i in data['channel_list']) {
+                buttons[i]['req_json'] = {'addresses_list': [{"channel": data['channel_list'][i], "topic": "Snapshot"}]}
+                buttons[i].innerHTML = data['channel_list'][i];
+                buttons[i].onclick = (btn=buttons[i]['req_json']) => {
+                    console.log(btn.target['req_json'])
+                    toastr["success"](`Фото доски отправлено в канал: ${btn.target['req_json'].addresses_list[0].channel}, тему: ${btn.target['req_json'].addresses_list[0].topic}.`);
+                    postData('/snapshot/make', btn.target['req_json']).then((data) => {
+                        if (data['error']) {
+                            toastr["error"](`Возникла ошибка: ${data['error']}`)
+                        }
+                    
+                    });
+                }
             }
-        });
-    }
-    */
+        }
+    });
+    
+    
+    
 </script>

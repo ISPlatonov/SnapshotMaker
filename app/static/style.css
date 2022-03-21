@@ -26,7 +26,7 @@ html, body {
     z-index: 10;
     display: flex;
 }
-.btn-group button {
+.btn {
     background-color: #04AA6D;
     border: 1px solid green;
     color: white;
@@ -41,9 +41,9 @@ html, body {
     clear: both;
     display: table;
 }
-.btn-group button:not(:last-child) {
+.btn:not(:last-child) {
     border-right: none;
 }
-.btn-group button:hover {
+.btn:hover {
     background-color: #3e8e41;
 }

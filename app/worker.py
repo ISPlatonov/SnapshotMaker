@@ -9,7 +9,7 @@ from app.image_sender import send_image
 # it should be loaded up from json file! 
 #rtsp_address = 'rtsp://admin:Supervisor@172.18.191.177/live/0/MAIN/'
 #max_snaps_number = 20
-with open('app/configs/config.json') as config_file:
+with open('app/configs/config.json', encoding='utf-8') as config_file:
     config = json.load(config_file)
 
 rtsp_address = config['rtsp_address']
@@ -25,7 +25,6 @@ def get_mjpg_address():
     return mjpg_address
 
 def get_channel_list():
-    print(channel_list)
     return channel_list
 
 def make_snapshot(addresses_list):

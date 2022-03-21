@@ -1,4 +1,3 @@
-import urllib
 from flask import render_template
 from flask.globals import request
 from flask.json import jsonify
@@ -25,7 +24,7 @@ def index():
 @app.route('/channel_list/get', methods=['GET'])
 def get_channels():
     try:
-        return urllib.parse.urlencode(str({"channel_list": get_channel_list()})), 200
+        return {"channel_list": get_channel_list()}, 200
 
     except Exception as error:
         print(repr(error))
