@@ -20,7 +20,7 @@ html, body {
 .btn-group {
     overflow: hidden;
     width: 100%;
-    height: 5%;
+    height: 10%;
     bottom: 0;
     position: fixed;
     z-index: 10;
@@ -35,6 +35,8 @@ html, body {
     flex: 1 1 auto;
     text-align: center;
     max-width: 20%;
+    word-wrap: break-word;
+    font-size: 1.5vw;
 }
 .btn-group:after {
     content: "";
