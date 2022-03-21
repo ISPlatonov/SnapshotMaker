@@ -7,17 +7,26 @@ from app.image_sender import send_image
 
 
 # it should be loaded up from json file! 
-#camera_address = 'rtsp://admin:Supervisor@172.18.191.177/live/0/MAIN/'
+#rtsp_address = 'rtsp://admin:Supervisor@172.18.191.177/live/0/MAIN/'
 #max_snaps_number = 20
 with open('app/configs/config.json') as config_file:
     config = json.load(config_file)
 
-camera_address = config['camera_address']
+rtsp_address = config['rtsp_address']
+mjpg_address = config['mjpg_address']
+channel_list = config['channel_list']
 max_snaps_number = config['max_snaps_number']
 
 
-def get_camera_address():
-    return camera_address
+def get_rtsp_address():
+    return rtsp_address
+
+def get_mjpg_address():
+    return mjpg_address
+
+def get_channel_list():
+    print(channel_list)
+    return channel_list
 
 def make_snapshot(addresses_list):
     if not isinstance(addresses_list, list):
@@ -30,10 +39,10 @@ def make_snapshot(addresses_list):
     echo $file_name
     '''
 
-    #command = ['bash', 'app/scripts/make_snapshot.sh', camera_address]
+    #command = ['bash', 'app/scripts/make_snapshot.sh', rtsp_address]
     try:
         filename = 'snapshot_{}.jpg'.format(time.time())
-        command = ['ffmpeg', '-rtsp_transport', 'tcp', '-i', camera_address, '-y', '-vframes', '1', '-loglevel', 'error', 'snapshots/{}'.format(filename)]
+        command = ['ffmpeg', '-rtsp_transport', 'tcp', '-i', rtsp_address, '-y', '-vframes', '1', '-loglevel', 'error', 'snapshots/{}'.format(filename)]
         process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
         #filename = process.stdout.read()
         process.wait()
