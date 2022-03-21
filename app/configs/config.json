@@ -3,6 +3,7 @@
 	"mjpg_address": "http://admin:Supervisor@172.18.191.177/Streams/1/4/ReceiveData",
 	"max_snaps_number": 20,
 	"channel_list": [
+		"СВТ-2 Портативная встраиваемая система \"Board Snapshot\"",
 		"УЛ Видеотехнологий",
 		"297 Видеозалы",
 		"19102 Телецентр (АСБ)",

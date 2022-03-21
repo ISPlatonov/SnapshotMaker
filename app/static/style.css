@@ -34,7 +34,7 @@ html, body {
     float: left;
     flex: 1 1 auto;
     text-align: center;
-    max-width: 20%;
+    max-width: 16.6%;
     word-wrap: break-word;
     font-size: 1.5vw;
 }
@@ -48,4 +48,19 @@ html, body {
 }
 .btn:hover {
     background-color: #3e8e41;
+}
+.refresh {
+    background-color: #04AA6D;
+    border: 1px solid green;
+    color: white;
+    cursor: pointer;
+    float: left;
+    position: fixed;
+    right: 0;
+    top: 0;
+    text-align: center;
+    max-width: 20%;
+    word-wrap: break-word;
+    font-size: 1.5vw;
+    z-index: 10;
 }
