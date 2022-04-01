@@ -2,21 +2,34 @@
 <title>Snapshotmaker</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='toastr.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<section class="container">
-    <div class="button">
-        <div id="button" class="select-button"></div>
-    </div>
-    <img class="stream" src="http://admin:Supervisor@172.18.191.177/Streams/1/4/ReceiveData"></img>
-</section>
+<div class="btn-group">
+    <button class="btn">SAMPLE</button>
+    <button class="btn">SAMPLE</button>
+    <button class="btn">SAMPLE</button>
+    <button class="btn">SAMPLE</button>
+    <button class="btn">SAMPLE</button>
+    <button class="btn">SAMPLE</button>
+</div>
+<button class="refresh" onClick="document.location.reload(true)">Перезагрузить</button>
+<div class="container">
+    <img class="preview" src="{{ mjpg_address }}"></img>
+</div>
 <script src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"></script>
 <script src="{{ url_for('static', filename='toastr.js') }}"></script>
 <script>
+    channelList = [
+    "СВТ-2 Портативная встраиваемая система \"Board Snapshot\"",
+    "#УЛ Видеотехнологий",
+    "#297 Видеозалы",
+    "#19102 Телецентр (АСБ)",
+    "#19104 Видеосервисы",
+    "#19107 Студия самозаписи"];
     toastr.options = {
         "closeButton": true,
         "debug": false,
         "newestOnTop": true,
         "progressBar": true,
-        "positionClass": "toast-bottom-full-width",
+        "positionClass": "toast-top-full-width",
         "preventDuplicates": false,
         "onclick": null,
         "showDuration": "300",
@@ -39,15 +52,34 @@
         });
         return await response.json(); // parses JSON response into native JavaScript objects
     }
-  
-    button = document.getElementById("button");
-    button.onclick = () => {
-        req_json = {"addresses_list": [{"channel": "СВТ-2 Портативная встраиваемая система \"Board Snapshot\"", "topic": "Snapshot"}]};
-        toastr["success"](`Фото доски отправлено в канал: ${req_json.addresses_list[0].channel}, тему: ${req_json.addresses_list[0].topic}.`);
-        postData('/snapshot/make', req_json).then((data) => {
-            if (data['error']) {
-                toastr["error"](`Возникла ошибка: ${data['error']}`)
-            }
+
+    async function getData(url = '') {
+        const response = await fetch(url, {
+        method: 'GET',
         });
+        return await response.json();
     }
+    
+    getData('/channel_list/get').then((data) => {
+        if (data['error']) {
+            toastr["error"](`Возникла ошибка при загрузке списка каналов. Загружены стандартные каналы.`);
+        } else {
+            buttons = document.getElementsByClassName("btn");
+            for (i in data['channel_list']) {
+                buttons[i]['req_json'] = {'addresses_list': [{"channel": data['channel_list'][i], "topic": "Фото доски"}]}
+                buttons[i].innerHTML = data['channel_list'][i];
+                buttons[i].onclick = (btn=buttons[i]['req_json']) => {
+                    toastr["success"](`Фото доски отправлено в канал: ${btn.target['req_json'].addresses_list[0].channel}, тему: ${btn.target['req_json'].addresses_list[0].topic}.`);
+                    postData('/snapshot/make', btn.target['req_json']).then((data) => {
+                        if (data['error']) {
+                            toastr["error"](`Возникла ошибка: ${data['error']}`)
+                        }
+                    });
+                }
+            }
+        }
+    });
+    
+    
+    
 </script>
