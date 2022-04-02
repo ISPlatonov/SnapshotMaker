@@ -41,7 +41,7 @@ def make_snapshot(addresses_list):
     #command = ['bash', 'app/scripts/make_snapshot.sh', rtsp_address]
     try:
         filename = 'snapshot_{}.jpg'.format(time.time())
-        command = ['ffmpeg', '-rtsp_transport', 'tcp', '-i', rtsp_address, '-y', '-vframes', '1', '-loglevel', 'error', 'snapshots/{}'.format(filename)]
+        command = ['ffmpeg', '-rtsp_transport', 'tcp', '-i', rtsp_address, '-y', '-vframes', '1', '-loglevel', 'error', '-vf', 'perspective=70:225:2520:190:170:1320:2410:1280', 'snapshots/{}'.format(filename)]
         process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
         #filename = process.stdout.read()
         process.wait()
