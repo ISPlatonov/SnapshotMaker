@@ -1,110 +1,94 @@
 import subprocess, time, json, os
-#from app import app
-#import sys
-#sys.path.append("./app")
-#from app import app
 from app.image_sender import send_image
+from app.ptz_control import ptzControl
 
 
-# it should be loaded up from json file! 
-#rtsp_address = 'rtsp://admin:Supervisor@172.18.191.177/live/0/MAIN/'
-#max_snaps_number = 20
-with open('app/configs/config.json', encoding='utf-8') as config_file:
-    config = json.load(config_file)
+class Worker:
+    def __init__(self):
+        with open('app/configs/config.json', encoding='utf-8') as config_file:
+            config = json.load(config_file)
 
-rtsp_address = config['rtsp_address']
-mjpg_address = config['mjpg_address']
-channel_list = config['channel_list']
-max_snaps_number = config['max_snaps_number']
+        self.rtsp_address = config['rtsp_address']
+        self.mjpg_address = config['mjpg_address']
+        self.channel_list = config['channel_list']
+        self.max_snaps_number = config['max_snaps_number']
+        self.camera_ip = config["camera_ip"]
+        self.camera_port = config["camera_port"]
+        self.camera_user = config["camera_user"]
+        self.camera_password = config["camera_password"]
 
+        self.ptz = ptzControl()
+        self.ptz.goto_preset()
 
-def get_rtsp_address():
-    return rtsp_address
-
-def get_mjpg_address():
-    return mjpg_address
-
-def get_channel_list():
-    return channel_list
-
-def make_snapshot(addresses_list):
-    if not isinstance(addresses_list, list):
-        raise TypeError("wrong datatype in request")
-
-    '''
-    file_name=snapshot_$(date +%s.%N).jpg
-
-    ffmpeg -rtsp_transport tcp -i $1 -y -vframes 1 -loglevel error snapshots/$file_name
-    echo $file_name
-    '''
-
-    #command = ['bash', 'app/scripts/make_snapshot.sh', rtsp_address]
-    try:
-        filename = 'snapshot_{}.jpg'.format(time.time())
-        command = ['ffmpeg', '-rtsp_transport', 'tcp', '-i', rtsp_address, '-y', '-vframes', '1', '-loglevel', 'error', '-vf', 'perspective=70:225:2520:190:170:1320:2410:1280', 'snapshots/{}'.format(filename)]
-        process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
-        #filename = process.stdout.read()
-        process.wait()
-    except Exception:
-        raise
-     
-    try:
-        send_snapshot(filename, addresses_list)
-    except Exception:
-        raise
     
+    def get_rtsp_address(self):
+        return self.rtsp_address
 
-def send_snapshot(filename, address_list):
-    for address in address_list:
-        #command = ['python3', 'app/scripts/image_sender.py', '--channel', address['channel'], '--topic', address['topic'], '--image', 'snapshots/' + filename.decode('utf-8').strip(), '--config', 'app/configs/.zuliprc']
+
+    def get_mjpg_address(self):
+        return self.mjpg_address
+
+
+    def get_channel_list(self):
+        return self.channel_list
+
+
+    def make_snapshot(self, addresses_list):
+        if not isinstance(addresses_list, list):
+            raise TypeError("wrong datatype in request")
+
         try:
-            #process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
-            #output = process.stdout.read()
-            #print('snapshots/' + filename.decode('utf-8').strip())
-            send_image(address['channel'], address['topic'], 'snapshots/' + filename, 'app/configs/.zuliprc')
-            check_overlimit()
+            filename = 'snapshot_{}.jpg'.format(time.time())
+            command = ['ffmpeg', '-rtsp_transport', 'tcp', '-i', self.rtsp_address, '-y', '-vframes', '1', '-loglevel', 'error', '-vf', 'perspective=70:225:2520:190:170:1320:2410:1280', 'snapshots/{}'.format(filename)]
+            process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
+            process.wait()
         except Exception:
-            raise 
-      
-
-def check_overlimit():
-    #command = ['bash', 'app/scripts/count_snapshots.sh']
-    try:
-        #process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
-        snaps_number = len(os.listdir()) #int(process.stdout.read())
-    except Exception:
-        raise
-
-    if snaps_number > max_snaps_number:
+            raise
+        
         try:
-            remove_overlimit(snaps_number - max_snaps_number)
+            self.send_snapshot(filename, addresses_list)
+        except Exception:
+            raise
+        
+
+    def send_snapshot(self, filename, address_list):
+        for address in address_list:
+            try:
+                send_image(address['channel'], address['topic'], 'snapshots/' + filename, 'app/configs/.zuliprc')
+                self.check_overlimit()
+            except Exception:
+                raise 
+        
+
+    def check_overlimit(self):
+        try:
+            snaps_number = len(os.listdir())
         except Exception:
             raise
 
+        if snaps_number > self.max_snaps_number:
+            try:
+                self.remove_overlimit(snaps_number - self.max_snaps_number)
+            except Exception:
+                raise
 
-def remove_overlimit(overlimit_number):
-    # ... will write it later...
-    #command = ['bash', 'app/scripts/list_snapshots.sh']
-    try:
-        #process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
-        #files_list = process.stdout.read()
 
-        files_list = os.listdir('snapshots/') #files_list.decode('utf-8').split()
-    except Exception:
-        raise
+    def remove_overlimit(self, overlimit_number):
+        try:
+            files_list = os.listdir('snapshots/') #files_list.decode('utf-8').split()
+        except Exception:
+            raise
 
-    #print(overlimit_number)
+        files_list.sort()
+        files_to_erase = files_list[:overlimit_number]
 
-    files_list.sort()
-    files_to_erase = files_list[:overlimit_number]
+        for filename in files_to_erase:
+            os.remove('snapshots/{}'.format(filename))
 
-    for filename in files_to_erase:
-        #command = ['bash', 'app/scripts/remove_snapshot.sh', filename]
-        #process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
-        #output = process.stdout.read()
         
-        #if output != '': # ???
-            # error
-            #pass
-        os.remove('snapshots/{}'.format(filename))
+    def set_camera(self):
+        self.ptz.set_preset()
 
+    
+    def move_camera(self):
+        self.ptz.goto_preset()

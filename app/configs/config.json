@@ -1,6 +1,11 @@
 {
 	"rtsp_address": "rtsp://admin:Supervisor@172.18.191.177/live/0/MAIN/",
 	"mjpg_address": "http://admin:Supervisor@172.18.191.177/Streams/1/4/ReceiveData",
+    "camera_ip": "172.18.191.177",
+    "camera_port": 80,
+    "camera_user": "admin",
+    "camera_password": "Supervisor",
+    "camera_preset": "aboba",
 	"max_snaps_number": 20,
 	"channel_list": [
 		"СВТ-2 Портативная встраиваемая система \"Board Snapshot\"",
