@@ -26,6 +26,7 @@
             camera_id = prompt("Please enter auditory id", "435_MIEM");
             if (camera_id == null || camera_id == "" || camera_id == undefined) {
                 toastr["error"](`No auditory is choosen`);
+                document.location.reload();
             } else {
                 toastr["info"]("Current auditory:" + camera_id);
                 window.location.search = "?camera_id=".concat(camera_id);
