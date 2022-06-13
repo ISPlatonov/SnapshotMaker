@@ -1,18 +1,41 @@
 {
-	"rtsp_address": "rtsp://admin:Supervisor@172.18.191.177/live/0/MAIN/",
-	"mjpg_address": "http://admin:Supervisor@172.18.191.177/Streams/1/4/ReceiveData",
-    "camera_ip": "172.18.191.177",
-    "camera_port": 80,
-    "camera_user": "admin",
-    "camera_password": "Supervisor",
-    "camera_preset": "aboba",
-	"max_snaps_number": 20,
-	"channel_list": [
-		"СВТ-2 Портативная встраиваемая система \"Board Snapshot\"",
-		"УЛ Видеотехнологий",
-		"297 Видеозалы",
-		"19102 Телецентр (АСБ)",
-		"19104 Видеосервисы",
-		"19107 Студия самозаписи"
-	]
+    "cameras": {
+        "435_MIEM": {
+            "rtsp_address": "rtsp://admin:Supervisor@172.18.191.177/live/0/MAIN/",
+            "mjpg_address": "http://admin:Supervisor@172.18.191.177/Streams/1/4/ReceiveData",
+            "camera_ip": "172.18.191.177",
+            "camera_port": 80,
+            "camera_user": "admin",
+            "camera_password": "Supervisor",
+            "camera_preset": "aboba",
+            "max_snaps_number": 20,
+            "channel_list": [
+                "СВТ-2 Портативная встраиваемая система \"Board Snapshot\"",
+                "УЛ Видеотехнологий",
+                "297 Видеозалы",
+                "19102 Телецентр (АСБ)",
+                "19104 Видеосервисы",
+                "19107 Студия самозаписи"
+            ]
+        },
+
+        "505_MIEM": {
+            "rtsp_address": "rtsp://172.18.191.137:8899/user=admin_password=BhcGS01Q_channel=1_stream=0.sdp?real_stream",
+            "mjpg_address": "",
+            "camera_ip": "172.18.191.137",
+            "camera_port": 8899,
+            "camera_user": "admin",
+            "camera_password": "Supervisor",
+            "camera_preset": "aboba",
+            "max_snaps_number": 20,
+            "channel_list": [
+                "СВТ-2 Портативная встраиваемая система \"Board Snapshot\"",
+                "УЛ Видеотехнологий",
+                "297 Видеозалы",
+                "19102 Телецентр (АСБ)",
+                "19104 Видеосервисы",
+                "19107 Студия самозаписи"
+            ]
+        }
+    }
 }

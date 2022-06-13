@@ -1,45 +1,34 @@
 import subprocess, time, json, os
 from app.image_sender import send_image
 from app.ptz_control import ptzControl
+import copy
 
 
 class Worker:
     def __init__(self):
         with open('app/configs/config.json', encoding='utf-8') as config_file:
-            config = json.load(config_file)
-
-        self.rtsp_address = config['rtsp_address']
-        self.mjpg_address = config['mjpg_address']
-        self.channel_list = config['channel_list']
-        self.max_snaps_number = config['max_snaps_number']
-        self.camera_ip = config["camera_ip"]
-        self.camera_port = config["camera_port"]
-        self.camera_user = config["camera_user"]
-        self.camera_password = config["camera_password"]
-
-        self.ptz = ptzControl()
-        self.ptz.goto_preset()
+            self.__config = json.load(config_file)
 
     
-    def get_rtsp_address(self):
-        return self.rtsp_address
+    def get_rtsp_address(self, camera_id):
+        return self.__config['cameras'][camera_id]['rtsp_address']
 
 
-    def get_mjpg_address(self):
-        return self.mjpg_address
+    def get_mjpg_address(self, camera_id):
+        return self.__config['cameras'][camera_id]['rtsp_address']['mjpg_address']
 
 
-    def get_channel_list(self):
-        return self.channel_list
+    def get_channel_list(self, camera_id):
+        return self.__config['cameras'][camera_id]['rtsp_address']['channel_list']
 
 
-    def make_snapshot(self, addresses_list):
+    def make_snapshot(self, camera_id, addresses_list):
         if not isinstance(addresses_list, list):
             raise TypeError("wrong datatype in request")
 
         try:
             filename = 'snapshot_{}.jpg'.format(time.time())
-            command = ['ffmpeg', '-rtsp_transport', 'tcp', '-i', self.rtsp_address, '-y', '-vframes', '1', '-loglevel', 'error', '-vf', 'perspective=70:225:2520:190:170:1320:2410:1280', 'snapshots/{}'.format(filename)]
+            command = ['ffmpeg', '-rtsp_transport', 'tcp', '-i', self.__config['cameras'][camera_id]['rtsp_address'], '-y', '-vframes', '1', '-loglevel', 'error', '-vf', 'perspective=70:225:2520:190:170:1320:2410:1280', 'snapshots/{}'.format(filename)]
             process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
             process.wait()
         except Exception:
@@ -86,9 +75,15 @@ class Worker:
             os.remove('snapshots/{}'.format(filename))
 
         
-    def set_camera(self):
-        self.ptz.set_preset()
+    def set_camera(self, camera_id):
+        ptz = ptzControl(camera_id)
+        ptz.set_preset()
 
     
-    def move_camera(self):
-        self.ptz.goto_preset()
+    def move_camera(self, camera_id):
+        ptz = ptzControl(camera_id)
+        ptz.goto_preset()
+    
+
+    def get_config(self, camera_id):
+        return copy.deepcopy(self.__config['cameras'][camera_id])

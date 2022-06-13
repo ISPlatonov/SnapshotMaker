@@ -7,9 +7,10 @@ with open('app/configs/config.json', encoding='utf-8') as config_file:
 
 
 class ptzControl(object):
-    def __init__(self):
+    def __init__(self, camera_id):
         super(ptzControl, self).__init__()
-        self.mycam = ONVIFCamera(config["camera_ip"], config["camera_port"], config["camera_user"], config["camera_password"])
+        self.camera_id = camera_id
+        self.mycam = ONVIFCamera(config['cameras'][camera_id]["camera_ip"], config['cameras'][camera_id]["camera_port"], config['cameras'][camera_id]["camera_user"], config['cameras'][camera_id]["camera_password"])
         # create media service object
         self.media = self.mycam.create_media_service()
         # Get target profile
@@ -128,8 +129,8 @@ class ptzControl(object):
 
         # Sets preset set, query and and go to
 
-    def set_preset(self, name=config["camera_preset"]):
-        self.requestp.PresetName = name
+    def set_preset(self):
+        self.requestp.PresetName = config['cameras'][self.camera_id]["camera_preset"]
         self.requestp.PresetToken = 'aboba'
         self.preset = self.ptz.SetPreset(self.requestp)  # returns the PresetToken
 
