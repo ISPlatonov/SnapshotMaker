@@ -15,11 +15,11 @@ class Worker:
 
 
     def get_mjpg_address(self, camera_id):
-        return self.__config['cameras'][camera_id]['rtsp_address']['mjpg_address']
+        return self.__config['cameras'][camera_id]['mjpg_address']
 
 
     def get_channel_list(self, camera_id):
-        return self.__config['cameras'][camera_id]['rtsp_address']['channel_list']
+        return self.__config['cameras'][camera_id]['channel_list']
 
 
     def make_snapshot(self, camera_id, addresses_list):
@@ -55,9 +55,9 @@ class Worker:
         except Exception:
             raise
 
-        if snaps_number > self.max_snaps_number:
+        if snaps_number > self.__config['max_snaps_number']:
             try:
-                self.remove_overlimit(snaps_number - self.max_snaps_number)
+                self.remove_overlimit(snaps_number - self.__config['max_snaps_number'])
             except Exception:
                 raise
 

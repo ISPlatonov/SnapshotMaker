@@ -17,13 +17,8 @@
 <script src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"></script>
 <script src="{{ url_for('static', filename='toastr.js') }}"></script>
 <script>
-    channelList = [
-    "СВТ-2 Портативная встраиваемая система \"Board Snapshot\"",
-    "#УЛ Видеотехнологий",
-    "#297 Видеозалы",
-    "#19102 Телецентр (АСБ)",
-    "#19104 Видеосервисы",
-    "#19107 Студия самозаписи"];
+    camera_id = "435_MIEM"
+    
     toastr.options = {
         "closeButton": true,
         "debug": false,
@@ -60,13 +55,13 @@
         return await response.json();
     }
     
-    getData('/channel_list/get').then((data) => {
+    getData('/channel_list/get?camera_id='.concat(camera_id)).then((data) => {
         if (data['error']) {
             toastr["error"](`Возникла ошибка при загрузке списка каналов. Загружены стандартные каналы.`);
         } else {
             buttons = document.getElementsByClassName("btn");
             for (i in data['channel_list']) {
-                buttons[i]['req_json'] = {'addresses_list': [{"channel": data['channel_list'][i], "topic": "Фото доски"}]}
+                buttons[i]['req_json'] = {'addresses_list': [{"channel": data['channel_list'][i], "topic": "Фото доски"}], 'camera_id': camera_id}
                 buttons[i].innerHTML = data['channel_list'][i];
                 buttons[i].onclick = (btn=buttons[i]['req_json']) => {
                     toastr["success"](`Фото доски отправлено в канал: ${btn.target['req_json'].addresses_list[0].channel}, тему: ${btn.target['req_json'].addresses_list[0].topic}.`);

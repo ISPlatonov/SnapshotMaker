@@ -8,7 +8,6 @@
             "camera_user": "admin",
             "camera_password": "Supervisor",
             "camera_preset": "aboba",
-            "max_snaps_number": 20,
             "channel_list": [
                 "СВТ-2 Портативная встраиваемая система \"Board Snapshot\"",
                 "УЛ Видеотехнологий",
@@ -27,7 +26,6 @@
             "camera_user": "admin",
             "camera_password": "Supervisor",
             "camera_preset": "aboba",
-            "max_snaps_number": 20,
             "channel_list": [
                 "СВТ-2 Портативная встраиваемая система \"Board Snapshot\"",
                 "УЛ Видеотехнологий",
@@ -37,5 +35,7 @@
                 "19107 Студия самозаписи"
             ]
         }
-    }
+    },
+    
+    "max_snaps_number": 20
 }
