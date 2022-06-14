@@ -28,7 +28,7 @@ class Worker:
 
         try:
             filename = 'snapshot_{}.jpg'.format(time.time())
-            command = ['ffmpeg', '-rtsp_transport', 'tcp', '-i', self.__config['cameras'][camera_id]['rtsp_address'], '-y', '-vframes', '1', '-loglevel', 'error', '-vf', 'perspective=70:225:2520:190:170:1320:2410:1280', 'snapshots/{}'.format(filename)]
+            command = ['ffmpeg', '-rtsp_transport', 'tcp', '-i', self.__config['cameras'][camera_id]['rtsp_address'], '-y', '-vframes', '1', '-loglevel', 'error', '-vf', 'perspective=' + self.__config['cameras'][camera_id]['perspective'], 'snapshots/{}'.format(filename)]
             process = subprocess.Popen(args=command, stdout=subprocess.PIPE)
             process.wait()
         except Exception:
@@ -44,6 +44,7 @@ class Worker:
         for address in address_list:
             try:
                 send_image(address['channel'], address['topic'], 'snapshots/' + filename, 'app/configs/.zuliprc')
+                print('sent photo')
                 self.check_overlimit()
             except Exception:
                 raise 

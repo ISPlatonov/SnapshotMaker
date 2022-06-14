@@ -3,6 +3,7 @@
         "435_MIEM": {
             "rtsp_address": "rtsp://admin:Supervisor@172.18.191.177/live/0/MAIN/",
             "mjpg_address": "http://admin:Supervisor@172.18.191.177/Streams/1/4/ReceiveData",
+            "perspective": "70:225:2520:190:170:1320:2410:1280",
             "camera_ip": "172.18.191.177",
             "camera_port": 80,
             "camera_user": "admin",
@@ -19,12 +20,13 @@
         },
 
         "505_MIEM": {
-            "rtsp_address": "rtsp://172.18.191.137:8899/user=admin_password=BhcGS01Q_channel=1_stream=0.sdp?real_stream",
+            "rtsp_address": "rtsp://172.18.191.137/user=admin_password=BhcGS01Q_channel=1_stream=0.sdp?real_stream",
             "mjpg_address": "",
+            "perspective": "100:510:2570:500:120:1760:2590:1700",
             "camera_ip": "172.18.191.137",
             "camera_port": 8899,
             "camera_user": "admin",
-            "camera_password": "Supervisor",
+            "camera_password": "BhcGS01Q",
             "camera_preset": "aboba",
             "channel_list": [
                 "СВТ-2 Портативная встраиваемая система \"Board Snapshot\"",
@@ -36,6 +38,6 @@
             ]
         }
     },
-    
+
     "max_snaps_number": 20
 }
