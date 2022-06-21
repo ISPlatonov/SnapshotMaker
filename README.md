@@ -4,9 +4,9 @@ This web service is used for making board snapshots through ONVIF cameras and se
 
 ## Dependencies
 
-To deploy the server a machine has to have `python3` + `flask`, `ffmpeg`:
+To deploy the server a machine has to have `python3` + `flask`, `ffmpeg` and `zulip`:
 
-    sudo apt install python3 python3-pip ffmpeg
+    sudo apt install python3 python3-pip ffmpeg zulip
     pip3 install flask
 
 ## Run
