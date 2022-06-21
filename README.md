@@ -1,20 +1,18 @@
 # SnapshotMaker
 
-## Зависимости
+This web service is used for making board snapshots through ONVIF cameras and sending them into selected Zulip topic/channel on tap/click of a button.
 
-Для работы необходимо иметь `python3` + `flask`, `ffmpeg` на linux-машине.
+## Dependencies
 
-Скрипты для установки:
+To deploy the server a machine has to have `python3` + `flask`, `ffmpeg`:
 
     sudo apt install python3 python3-pip ffmpeg
     pip3 install flask
 
-Также используется стандартная коммандная оболочка `bash`.
+## Run
 
-## Запуск
-
-Запуск API-сервера:
+To start the server run:
 
     flask run --host=0.0.0.0
 
-В терминале будет указан адрес сервиса.
+Access address will appear in terminal. Usually, it will be on 5000 port.
